@@ -5,11 +5,12 @@ import { Playlist } from '../../models/deezer.models';
 import { DeezerService } from '../../services/deezer.service';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { Card } from 'primeng/card';
 
 @Component({
   selector: 'app-playlists',
   standalone: true,
-  imports: [CommonModule, ButtonModule, ProgressSpinner],
+  imports: [CommonModule, ButtonModule, ProgressSpinner, Card],
   templateUrl: './playlists.component.html',
   styleUrls: ['./playlists.component.scss'],
 })

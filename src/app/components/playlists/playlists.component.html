@@ -2,13 +2,11 @@
   <!-- Playlists grid -->
   <div class="grid">
     @for (playlist of playlists; track playlist.id) {
-      <div
-        class="playlist-card"
-        (click)="onPlaylistClick(playlist)"
-      >
-        <img [src]="playlist.picture_medium" [alt]="playlist.title"/>
-        <div class="playlist-title">{{ playlist.title }}</div>
-      </div>
+      <p-card (click)="onPlaylistClick(playlist)" class="playlist-card">
+        <img [src]="playlist.picture_medium" [alt]="playlist.title" class="w-full border-round shadow-2"/>
+        <p>{{ playlist.title }}</p>
+      </p-card>
+
     }
   </div>
 
@@ -19,7 +17,7 @@
 
   <!-- Load More button -->
   @if (nextUrl && !isLoading) {
-    <div class="p-text-center">
+    <div class="flex justify-content-center">
       <p-button
         label="Load More"
         icon="pi pi-angle-double-down"

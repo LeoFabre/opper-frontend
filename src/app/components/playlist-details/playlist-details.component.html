@@ -1,11 +1,8 @@
 <div class="playlist-details-container">
   <!-- Loading State for Playlist Details -->
   @if (isLoadingDetails) {
-    <div class="loading">
-      Loading playlist details...
-    </div>
+    <p-progressSpinner />
   }
-
   <!-- Playlist Details -->
   @if (!isLoadingDetails && playlist) {
     <div class="header">
@@ -22,16 +19,24 @@
 
   <!-- Tracks List -->
   @if (tracks.length > 0) {
-    <div class="tracks-list">
-      @for (track of tracks; track track; let i = $index) {
-        <div class="track">
-          <div class="track-number">{{ i + 1 }}</div>
-          <div class="track-title">{{ track.title }}</div>
-          <div class="track-artist">{{ track.artist.name }}</div>
-          <div class="track-duration">{{ formatTrackDuration(track.duration) }}</div>
-        </div>
-      }
-    </div>
+    <p-table [value]="tracks" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template #header>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Artist</th>
+          <th>Duration</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-track let-i="rowIndex">
+        <tr>
+          <td>{{ i + 1 }}</td>
+          <td>{{ track.title }}</td>
+          <td>{{ track.artist.name }}</td>
+          <td>{{ formatTrackDuration(track.duration) }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
   }
 
   <!-- Loading State for Tracks -->

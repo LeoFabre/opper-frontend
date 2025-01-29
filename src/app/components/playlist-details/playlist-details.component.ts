@@ -1,15 +1,16 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
 import { DeezerPlaylistDetailResponse, Track } from '../../models/deezer.models';
 import { DeezerService } from '../../services/deezer.service';
 import { formatDuration } from '../../utils/format-duration';
+import { TableModule } from 'primeng/table';
+import { ProgressSpinner } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-playlist-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TableModule, ProgressSpinner],
   templateUrl: './playlist-details.component.html',
   styleUrls: ['./playlist-details.component.scss'],
 })
