@@ -1,0 +1,50 @@
+<div class="playlist-details-container">
+  <!-- Loading State for Playlist Details -->
+  @if (isLoadingDetails){
+    <div class="loading">
+      Loading playlist details...
+    </div>
+  }
+
+  <!-- Playlist Details -->
+  @if (!isLoadingDetails && playlist){
+    <div class="header">
+      <img [src]="playlist.picture_medium" [alt]="playlist.title" />
+      <div class="header-info">
+        <h1>{{ playlist.title }}</h1>
+        <p>By {{ playlist.creator?.name }}</p>
+        <p>Duration: {{ formattedTotalDuration }}</p>
+        <p>Tracks: {{ tracks.length }}</p>
+        <p *ngIf="playlist.description">{{ playlist.description }}</p>
+      </div>
+    </div>
+  }
+
+  <!-- Tracks List -->
+  @if (tracks.length > 0){
+    <div class="tracks-list">
+      @for (track of tracks; track track; let i = $index){
+        <div class="track">
+          <div class="track-number">{{ i + 1 }}</div>
+          <div class="track-title">{{ track.title }}</div>
+          <div class="track-artist">{{ track.artist.name }}</div>
+          <div class="track-duration">{{ formatTrackDuration(track.duration) }}</div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Loading State for Tracks -->
+  @if (isLoadingTracks){
+    <div class="loading">
+      Loading tracks...
+    </div>
+  }
+
+  <!-- No Tracks Message -->
+  @if (!isLoadingTracks && tracks.length === 0) {
+    <div class="no-tracks">
+      No tracks available in this playlist.
+    </div>
+  }
+</div>
