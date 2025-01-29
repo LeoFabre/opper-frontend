@@ -1,21 +1,34 @@
 <div class="playlist-details-container">
-  <!-- Loading State for Playlist Details -->
-  @if (isLoadingDetails) {
-    <p-progressSpinner />
-  }
-  <!-- Playlist Details -->
-  @if (!isLoadingDetails && playlist) {
-    <div class="header">
-      <img [src]="playlist.picture_medium" [alt]="playlist.title"/>
-      <div class="header-info">
-        <h1>{{ playlist.title }}</h1>
-        <p>By {{ playlist.creator.name }}</p>
-        <p>Duration: {{ formattedTotalDuration }}</p>
-        <p>Tracks: {{ tracks.length }}</p>
-        <p *ngIf="playlist.description">{{ playlist.description }}</p>
-      </div>
-    </div>
-  }
+  <p-accordion value="0">
+    <p-accordion-panel value="0">
+      <p-accordion-header>
+        <p-button icon="pi pi-arrow-left" label="Back" class="play-button" (click)="goBack()"/>
+        <p>Playlist details</p>
+      </p-accordion-header>
+      <p-accordion-content>
+        <!-- Loading State for Playlist Details -->
+        @if (isLoadingDetails) {
+          <div class="flex justify-content-center">
+            <p-progressSpinner/>
+          </div>
+        }
+        <!-- Playlist Details -->
+        @if (!isLoadingDetails && playlist) {
+          <div class="header">
+            <img [src]="playlist.picture_medium" [alt]="playlist.title"/>
+            <div class="header-info">
+              <h1>{{ playlist.title }}</h1>
+              <p>By {{ playlist.creator.name }}</p>
+              <p>Duration: {{ formattedTotalDuration }}</p>
+              <p>Tracks: {{ tracks.length }}</p>
+              <p *ngIf="playlist.description">{{ playlist.description }}</p>
+            </div>
+          </div>
+        }
+      </p-accordion-content>
+    </p-accordion-panel>
+  </p-accordion>
+
 
   <!-- Tracks List -->
   @if (tracks.length > 0) {
@@ -41,8 +54,8 @@
 
   <!-- Loading State for Tracks -->
   @if (isLoadingTracks) {
-    <div class="loading">
-      Loading tracks...
+    <div class="flex justify-content-center">
+      <p-progressSpinner/>
     </div>
   }
 

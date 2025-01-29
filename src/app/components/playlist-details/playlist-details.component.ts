@@ -1,16 +1,18 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DeezerPlaylistDetailResponse, Track } from '../../models/deezer.models';
 import { DeezerService } from '../../services/deezer.service';
 import { formatDuration } from '../../utils/format-duration';
 import { TableModule } from 'primeng/table';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { Accordion, AccordionContent, AccordionHeader, AccordionPanel } from 'primeng/accordion';
+import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-playlist-details',
   standalone: true,
-  imports: [CommonModule, TableModule, ProgressSpinner],
+  imports: [CommonModule, TableModule, ProgressSpinner, Accordion, AccordionPanel, AccordionHeader, AccordionContent, Button],
   templateUrl: './playlist-details.component.html',
   styleUrls: ['./playlist-details.component.scss'],
 })
@@ -25,6 +27,7 @@ export class PlaylistDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private deezerService: DeezerService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -110,6 +113,12 @@ export class PlaylistDetailsComponent implements OnInit {
     }
   }
 
+  /**
+   * Returns to playlists view.
+   */
+  goBack(): void {
+    this.router.navigate(['/']);
+  }
   /**
    * Formats the total duration of the playlist.
    */

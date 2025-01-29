@@ -3,9 +3,8 @@
 
   .header {
     display: flex;
-    flex-wrap: wrap;
+    width: 100%;
     align-items: center;
-    margin-bottom: 30px;
 
     img {
       width: 300px;
@@ -25,51 +24,8 @@
 
       p {
         margin: 5px 0;
-        font-size: 1.2em;
+        font-size: 1.05em;
       }
     }
   }
-
-  .tracks-list {
-    display: flex;
-    flex-direction: column;
-
-    .track {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-
-      .track-number {
-        width: 30px;
-        text-align: center;
-      }
-
-      .track-title {
-        flex: 2;
-      }
-
-      .track-artist {
-        flex: 1;
-        text-align: center;
-      }
-
-      .track-duration {
-        width: 80px;
-        text-align: right;
-      }
-    }
-  }
-
-  .loading {
-    text-align: center;
-    margin: 20px 0;
-    font-size: 1.2em;
-  }
-}
-
-.loading {
-  text-align: center;
-  margin: 50px 0;
-  font-size: 1.5em;
 }
