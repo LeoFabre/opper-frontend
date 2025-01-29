@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Playlist } from '../../models/deezer.models';
 import { DeezerService } from '../../services/deezer.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-playlists',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonModule],
   templateUrl: './playlists.component.html',
   styleUrls: ['./playlists.component.scss'],
 })
@@ -17,7 +16,7 @@ export class PlaylistsComponent implements OnInit {
   playlists: Playlist[] = [];
   nextUrl?: string;
   isLoading: boolean = false;
-  userId: number = 5; // Fixed user ID
+  userId: number = 5;
 
   constructor(private deezerService: DeezerService, private router: Router) {}
 
@@ -44,7 +43,6 @@ export class PlaylistsComponent implements OnInit {
     this.router.navigate(['/playlist', playlist.id]);
   }
 
-  // Optional: If you want to implement pagination or load more playlists
   loadMore(): void {
     if (this.nextUrl && !this.isLoading) {
       this.isLoading = true;

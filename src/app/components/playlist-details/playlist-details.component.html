@@ -12,7 +12,7 @@
       <img [src]="playlist.picture_medium" [alt]="playlist.title" />
       <div class="header-info">
         <h1>{{ playlist.title }}</h1>
-        <p>By {{ playlist.creator?.name }}</p>
+        <p>By {{ playlist.creator.name }}</p>
         <p>Duration: {{ formattedTotalDuration }}</p>
         <p>Tracks: {{ tracks.length }}</p>
         <p *ngIf="playlist.description">{{ playlist.description }}</p>

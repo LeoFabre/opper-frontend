@@ -1,27 +1,26 @@
 <div class="playlists-container">
-  <div class="grid">
-    @for (playlist of playlists; track playlist.id) {
-      <div
-        class="playlist-card"
-        (click)="onPlaylistClick(playlist)"
-      >
-        <img [src]="playlist.picture_medium" [alt]="playlist.title" />
-        <div class="playlist-title">{{ playlist.title }}</div>
-      </div>
-    }
-  </div>
-
-  @if (isLoading) {
-    <div class="loading">
-      Loading...
+    <div class="grid">
+        @for (playlist of playlists; track playlist.id) {
+            <div
+                    class="playlist-card"
+                    (click)="onPlaylistClick(playlist)"
+            >
+                <img [src]="playlist.picture_medium" [alt]="playlist.title"/>
+                <div class="playlist-title">{{ playlist.title }}</div>
+            </div>
+        }
     </div>
-  }
 
+    @if (isLoading) {
+        <div class="loading">
+            Loading...
+        </div>
+    }
 
-  <!-- Optional Load More Button -->
-  @if (nextUrl && !isLoading) {
-    <button (click)="loadMore()">
-      Load More
-    </button>
-  }
+    @if (nextUrl && !isLoading) {
+        <button (click)="loadMore()">
+            Load More
+        </button>
+        <p-button label="Load More (primeng)" (click)="loadMore()"/>
+    }
 </div>

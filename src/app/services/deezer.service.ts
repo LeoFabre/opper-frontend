@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, shareReplay } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { DeezerPlaylistDetailResponse, DeezerPlaylistResponse, DeezerTracksResponse } from '../models/deezer.models';
 
 @Injectable({
@@ -17,8 +17,6 @@ export class DeezerService {
     } else if (nextUrl.startsWith('/')) {
       return `${this.API_URL}${nextUrl}`;
     } else {
-      // Unexpected format; log and return the original nextUrl
-      console.warn(`Unexpected nextUrl format: ${nextUrl}`);
       return nextUrl;
     }
   }
