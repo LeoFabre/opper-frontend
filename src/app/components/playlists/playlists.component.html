@@ -21,10 +21,8 @@
 
   <!-- Load Mode button -->
   @if (nextUrl && !isLoading) {
-    <button (click)="loadMore()">
-      Load More
-    </button>
-    <!-- Testing primeNG, doesn't seem to work yet -->
-    <p-button label="Load More (primeng)" (click)="loadMore()"/>
+    <div style="text-align: center;">
+      <p-button label="Load More" (click)="loadMore()"/>
+    </div>
   }
 </div>
