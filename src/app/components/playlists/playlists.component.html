@@ -14,15 +14,17 @@
 
   <!-- Loading State -->
   @if (isLoading) {
-    <div class="loading">
-      Loading...
-    </div>
+    <p-progressSpinner />
   }
 
-  <!-- Load Mode button -->
+  <!-- Load More button -->
   @if (nextUrl && !isLoading) {
-    <div style="text-align: center;">
-      <p-button label="Load More" (click)="loadMore()"/>
+    <div class="p-text-center">
+      <p-button
+        label="Load More"
+        icon="pi pi-angle-double-down"
+        (click)="loadMore()"
+      />
     </div>
   }
 </div>

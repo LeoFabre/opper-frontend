@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Playlist } from '../../models/deezer.models';
 import { DeezerService } from '../../services/deezer.service';
 import { ButtonModule } from 'primeng/button';
+import { ProgressSpinner } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-playlists',
   standalone: true,
-  imports: [CommonModule, ButtonModule],
+  imports: [CommonModule, ButtonModule, ProgressSpinner],
   templateUrl: './playlists.component.html',
   styleUrls: ['./playlists.component.scss'],
 })
