@@ -1,12 +1,11 @@
 <div class="playlists-container">
   <!-- Playlists grid -->
-  <div class="grid">
+  <div class="grid justify-content-center align-items-center">
     @for (playlist of playlists; track playlist.id) {
       <p-card (click)="onPlaylistClick(playlist)" class="playlist-card">
         <img [src]="playlist.picture_medium" [alt]="playlist.title" class="w-full border-round shadow-2"/>
-        <p>{{ playlist.title }}</p>
+        <p style="color: #34d399">{{ playlist.title }}</p>
       </p-card>
-
     }
   </div>
 
@@ -21,7 +20,7 @@
   @if (nextUrl && !isLoading) {
     <div class="flex justify-content-center">
       <p-button
-        label="Load More"
+        label="Load more playlists"
         icon="pi pi-angle-double-down"
         (click)="loadMore()"
       />

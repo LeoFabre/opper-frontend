@@ -3,7 +3,7 @@
     <p-accordion-panel value="0">
       <p-accordion-header>
         <p-button icon="pi pi-arrow-left" label="Back" class="play-button" (click)="goBack()"/>
-        <p>Playlist details</p>
+        <p style="color: #34d399">Playlist details</p>
       </p-accordion-header>
       <p-accordion-content>
         <!-- Loading State for Playlist Details -->
@@ -17,7 +17,7 @@
           <div class="header">
             <img [src]="playlist.picture_medium" [alt]="playlist.title"/>
             <div class="header-info">
-              <h1>{{ playlist.title }}</h1>
+              <h1 style="color: #34d399">{{ playlist.title }}</h1>
               <p>By {{ playlist.creator.name }}</p>
               <p>Duration: {{ formattedTotalDuration }}</p>
               <p>Tracks: {{ tracks.length }}</p>
@@ -35,10 +35,10 @@
     <p-table [value]="tracks" [tableStyle]="{ 'min-width': '50rem' }">
       <ng-template #header>
         <tr>
-          <th>#</th>
-          <th>Title</th>
-          <th>Artist</th>
-          <th>Duration</th>
+          <th style="color: #34d399">#</th>
+          <th style="color: #34d399">Title</th>
+          <th style="color: #34d399">Artist</th>
+          <th style="color: #34d399">Duration</th>
         </tr>
       </ng-template>
       <ng-template #body let-track let-i="rowIndex">
