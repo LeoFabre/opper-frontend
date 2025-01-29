@@ -1,15 +1,15 @@
 <div class="playlist-details-container">
   <!-- Loading State for Playlist Details -->
-  @if (isLoadingDetails){
+  @if (isLoadingDetails) {
     <div class="loading">
       Loading playlist details...
     </div>
   }
 
   <!-- Playlist Details -->
-  @if (!isLoadingDetails && playlist){
+  @if (!isLoadingDetails && playlist) {
     <div class="header">
-      <img [src]="playlist.picture_medium" [alt]="playlist.title" />
+      <img [src]="playlist.picture_medium" [alt]="playlist.title"/>
       <div class="header-info">
         <h1>{{ playlist.title }}</h1>
         <p>By {{ playlist.creator.name }}</p>
@@ -21,9 +21,9 @@
   }
 
   <!-- Tracks List -->
-  @if (tracks.length > 0){
+  @if (tracks.length > 0) {
     <div class="tracks-list">
-      @for (track of tracks; track track; let i = $index){
+      @for (track of tracks; track track; let i = $index) {
         <div class="track">
           <div class="track-number">{{ i + 1 }}</div>
           <div class="track-title">{{ track.title }}</div>
@@ -35,7 +35,7 @@
   }
 
   <!-- Loading State for Tracks -->
-  @if (isLoadingTracks){
+  @if (isLoadingTracks) {
     <div class="loading">
       Loading tracks...
     </div>

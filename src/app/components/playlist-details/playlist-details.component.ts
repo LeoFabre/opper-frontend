@@ -23,7 +23,7 @@ export class PlaylistDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private deezerService: DeezerService
+    private deezerService: DeezerService,
   ) {}
 
   ngOnInit(): void {
@@ -42,7 +42,8 @@ export class PlaylistDetailsComponent implements OnInit {
    */
   loadPlaylistDetails(): void {
     this.isLoadingDetails = true;
-    this.deezerService.getPlaylistDetails(this.playlistId).subscribe({
+    this.deezerService.getPlaylistDetails(this.playlistId)
+    .subscribe({
       next: (response: DeezerPlaylistDetailResponse) => {
         this.playlist = response;
         this.isLoadingDetails = false;
@@ -59,7 +60,8 @@ export class PlaylistDetailsComponent implements OnInit {
    */
   loadTracks(): void {
     this.isLoadingTracks = true;
-    this.deezerService.getPlaylistTracks(this.playlistId).subscribe({
+    this.deezerService.getPlaylistTracks(this.playlistId)
+    .subscribe({
       next: (response) => {
         this.tracks = response.data;
         this.nextTracksUrl = response.next;
@@ -92,7 +94,8 @@ export class PlaylistDetailsComponent implements OnInit {
   loadMoreTracks(): void {
     if (this.nextTracksUrl) {
       this.isLoadingTracks = true;
-      this.deezerService.getNextPlaylistTracks(this.nextTracksUrl).subscribe({
+      this.deezerService.getNextPlaylistTracks(this.nextTracksUrl)
+      .subscribe({
         next: (response) => {
           this.tracks = [...this.tracks, ...response.data];
           this.nextTracksUrl = response.next;

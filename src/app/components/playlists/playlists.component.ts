@@ -20,13 +20,21 @@ export class PlaylistsComponent implements OnInit {
 
   constructor(private deezerService: DeezerService, private router: Router) {}
 
+  /**
+   * Fetches the user's playlists when the component is initialized.
+   */
   ngOnInit(): void {
     this.loadPlaylists();
   }
 
+  /**
+   * Fetches the user's playlists using the DeezerService.
+   * This method is called when the component is initialized.
+   */
   loadPlaylists(): void {
     this.isLoading = true;
-    this.deezerService.getUserPlaylists(this.userId).subscribe({
+    this.deezerService.getUserPlaylists(this.userId)
+    .subscribe({
       next: (response) => {
         this.playlists = response.data;
         this.nextUrl = response.next;
@@ -39,14 +47,23 @@ export class PlaylistsComponent implements OnInit {
     });
   }
 
+  /**
+   * Navigates to the playlist details page when a playlist is clicked.
+   * @param playlist The playlist that was clicked.
+   */
   onPlaylistClick(playlist: Playlist): void {
     this.router.navigate(['/playlist', playlist.id]);
   }
 
+  /**
+   * Fetches the next set of playlists for the user when they click the "Load More" button.
+   * Made it this way here to show that I can implement infinite scrolling AND button-based pagination.
+   */
   loadMore(): void {
     if (this.nextUrl && !this.isLoading) {
       this.isLoading = true;
-      this.deezerService.getNextUserPlaylists(this.nextUrl).subscribe({
+      this.deezerService.getNextUserPlaylists(this.nextUrl)
+      .subscribe({
         next: (response) => {
           this.playlists = [...this.playlists, ...response.data];
           this.nextUrl = response.next;

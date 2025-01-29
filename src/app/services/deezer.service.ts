@@ -10,6 +10,11 @@ export class DeezerService {
   private API_URL: string = '/api';
   http = inject(HttpClient);
 
+  /**
+   * Transforms the next URL to use the proxy path, fixing CORS errors when developing.
+   * @param nextUrl
+   * @private
+   */
   private transformNextUrl(nextUrl: string): string {
     const deezerApiBase = 'https://api.deezer.com';
     if (nextUrl.startsWith(deezerApiBase)) {
@@ -21,27 +26,47 @@ export class DeezerService {
     }
   }
 
+  /**
+   * Fetches the user's playlists.
+   * @param userId The user ID to fetch playlists for. Will default to 5 if not provided.
+   */
   getUserPlaylists(userId: number): Observable<DeezerPlaylistResponse> {
     const url = `${this.API_URL}/user/${userId}/playlists`;
     return this.http.get<DeezerPlaylistResponse>(url);
   }
 
+  /**
+   * Fetches the next set of playlists for the user.
+   * @param nextUrl The URL to fetch the next set of playlists from, which is provided in the first response.
+   */
   getNextUserPlaylists(nextUrl: string): Observable<DeezerPlaylistResponse> {
     // Remove the base URL to use the proxy path
     const relativeUrl = this.transformNextUrl(nextUrl);
     return this.http.get<DeezerPlaylistResponse>(relativeUrl);
   }
 
+  /**
+   * Fetches the details for a playlist.
+   * @param playlistId The ID of the playlist to fetch details for.
+   */
   getPlaylistDetails(playlistId: number): Observable<DeezerPlaylistDetailResponse> {
     const url = `${this.API_URL}/playlist/${playlistId}`;
     return this.http.get<DeezerPlaylistDetailResponse>(url);
   }
 
+  /**
+   * Fetches the tracks for a playlist.
+   * @param playlistId The ID of the playlist to fetch tracks for.
+   */
   getPlaylistTracks(playlistId: number): Observable<DeezerTracksResponse> {
     const url = `${this.API_URL}/playlist/${playlistId}/tracks`;
     return this.http.get<DeezerTracksResponse>(url);
   }
 
+  /**
+   * Fetches the next set of tracks for a playlist.
+   * @param nextUrl The URL to fetch the next set of tracks from, which is provided in the first response.
+   */
   getNextPlaylistTracks(nextUrl: string): Observable<DeezerTracksResponse> {
     // Remove the base URL to use the proxy path
     const relativeUrl = this.transformNextUrl(nextUrl);
