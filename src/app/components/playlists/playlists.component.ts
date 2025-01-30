@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Playlist } from '../../models/deezer.models';
@@ -6,6 +6,7 @@ import { DeezerService } from '../../services/deezer.service';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { Card } from 'primeng/card';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-playlists',
@@ -19,6 +20,7 @@ export class PlaylistsComponent implements OnInit {
   nextUrl?: string;
   isLoading: boolean = false;
   userId: number = 5;
+  private _destroyRef = inject(DestroyRef);
 
   constructor(private deezerService: DeezerService, private router: Router) {}
 
@@ -36,6 +38,7 @@ export class PlaylistsComponent implements OnInit {
   loadPlaylists(): void {
     this.isLoading = true;
     this.deezerService.getUserPlaylists(this.userId)
+    .pipe(takeUntilDestroyed(this._destroyRef))
     .subscribe({
       next: (response) => {
         this.playlists = response.data;
@@ -65,6 +68,7 @@ export class PlaylistsComponent implements OnInit {
     if (this.nextUrl && !this.isLoading) {
       this.isLoading = true;
       this.deezerService.getNextUserPlaylists(this.nextUrl)
+      .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: (response) => {
           this.playlists = [...this.playlists, ...response.data];
