@@ -19,8 +19,8 @@
             <div class="header-info">
               <h1 style="color: #34d399">{{ playlist.title }}</h1>
               <p>By {{ playlist.creator.name }}</p>
-              <p>Duration: {{ formattedTotalDuration }}</p>
-              <p>Tracks: {{ tracks.length }}</p>
+              <p>Duration: {{ playlist.duration | formatDuration }}</p>
+              <p>Tracks: {{ playlist.nb_tracks }}</p>
               <p *ngIf="playlist.description">{{ playlist.description }}</p>
             </div>
           </div>
@@ -31,36 +31,36 @@
 
 
   <!-- Tracks List -->
-  @if (tracks.length > 0) {
-    <p-table [value]="tracks" [tableStyle]="{ 'min-width': '50rem' }">
-      <ng-template #header>
-        <tr>
-          <th style="color: #34d399">#</th>
-          <th style="color: #34d399">Title</th>
-          <th style="color: #34d399">Artist</th>
-          <th style="color: #34d399">Duration</th>
-        </tr>
-      </ng-template>
-      <ng-template #body let-track let-i="rowIndex">
-        <tr>
-          <td>{{ i + 1 }}</td>
-          <td>{{ track.title }}</td>
-          <td>{{ track.artist.name }}</td>
-          <td>{{ formatTrackDuration(track.duration) }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  }
-
-  <!-- Loading State for Tracks -->
-  @if (isLoadingTracks) {
-    <div class="flex justify-content-center">
-      <p-progressSpinner/>
-    </div>
-  }
+  <p-table [value]="tracks" [scrollable]="true" scrollHeight="400px" [rows]="25" [virtualScroll]="true"
+           [virtualScrollItemSize]="46" [lazy]="true" (onLazyLoad)="loadTracks($event)">
+    <ng-template #header>
+      <tr>
+        <th style="color: #34d399">#</th>
+        <th style="color: #34d399">Title</th>
+        <th style="color: #34d399">Artist</th>
+        <th style="color: #34d399">Duration</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-track let-i="rowIndex">
+      <tr style="height:46px">
+        <td>{{ i + 1 }}</td>
+        <td>{{ track.title }}</td>
+        <td>{{ track.artist.name }}</td>
+        <td>{{ track.duration | formatDuration }}</td>
+      </tr>
+    </ng-template>
+    <ng-template #loadingbody>
+      <tr style="height:46px">
+        <td><p-skeleton [width]="'30px'"/></td>
+        <td><p-skeleton /></td>
+        <td><p-skeleton /></td>
+        <td><p-skeleton /></td>
+      </tr>
+    </ng-template>
+  </p-table>
 
   <!-- No Tracks Message -->
-  @if (!isLoadingTracks && tracks.length === 0) {
+  @if (playlist?.nb_tracks === 0) {
     <div class="no-tracks">
       No tracks available in this playlist.
     </div>

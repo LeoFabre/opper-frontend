@@ -58,8 +58,8 @@ export class DeezerService {
    * Fetches the tracks for a playlist.
    * @param playlistId The ID of the playlist to fetch tracks for.
    */
-  getPlaylistTracks(playlistId: number): Observable<DeezerTracksResponse> {
-    const url = `${this.API_URL}/playlist/${playlistId}/tracks`;
+  getPlaylistTracks(playlistId: number, index: number, rows: number): Observable<DeezerTracksResponse> {
+    const url = `${this.API_URL}/playlist/${playlistId}/tracks?index=${index}&limit=${rows}`;
     return this.http.get<DeezerTracksResponse>(url);
   }
 

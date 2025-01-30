@@ -1,44 +1,54 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DeezerPlaylistDetailResponse, Track } from '../../models/deezer.models';
 import { DeezerService } from '../../services/deezer.service';
-import { formatDuration } from '../../utils/format-duration';
-import { TableModule } from 'primeng/table';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { Accordion, AccordionContent, AccordionHeader, AccordionPanel } from 'primeng/accordion';
 import { Button } from 'primeng/button';
+import { FormatDurationPipe } from '../../utils/format-duration.pipe';
+import { Skeleton } from 'primeng/skeleton';
+import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-playlist-details',
   standalone: true,
-  imports: [CommonModule, TableModule, ProgressSpinner, Accordion, AccordionPanel, AccordionHeader, AccordionContent, Button],
+  imports: [CommonModule, TableModule, ProgressSpinner, Accordion, AccordionPanel, AccordionHeader, AccordionContent, Button, FormatDurationPipe, Skeleton],
   templateUrl: './playlist-details.component.html',
   styleUrls: ['./playlist-details.component.scss'],
 })
-export class PlaylistDetailsComponent implements OnInit {
+export class PlaylistDetailsComponent implements OnInit, OnDestroy {
   playlistId!: number;
   playlist?: DeezerPlaylistDetailResponse;
-  tracks: Track[] = [];
+  tracks!: Track[];
   nextTracksUrl?: string;
   isLoadingDetails: boolean = false;
-  isLoadingTracks: boolean = false;
+  private _getTracks$!: Subscription;
+  private _destroyRef = inject(DestroyRef);
 
   constructor(
     private route: ActivatedRoute,
     private deezerService: DeezerService,
-    private router: Router
-  ) {}
+    private router: Router,
+  ) {
+  }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((params) => {
       const idParam = params.get('id');
       if (idParam) {
         this.playlistId = +idParam;
         this.loadPlaylistDetails();
-        this.loadTracks();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this._getTracks$) {
+      this._getTracks$.unsubscribe();
+    }
   }
 
   /**
@@ -47,10 +57,12 @@ export class PlaylistDetailsComponent implements OnInit {
   loadPlaylistDetails(): void {
     this.isLoadingDetails = true;
     this.deezerService.getPlaylistDetails(this.playlistId)
+    .pipe(takeUntilDestroyed(this._destroyRef))
     .subscribe({
       next: (response: DeezerPlaylistDetailResponse) => {
         this.playlist = response;
         this.isLoadingDetails = false;
+        this.tracks = Array.from({ length: response.nb_tracks });
       },
       error: (err) => {
         console.error('Error fetching playlist details', err);
@@ -62,55 +74,23 @@ export class PlaylistDetailsComponent implements OnInit {
   /**
    * Fetches the initial set of tracks for the playlist.
    */
-  loadTracks(): void {
-    this.isLoadingTracks = true;
-    this.deezerService.getPlaylistTracks(this.playlistId)
+  loadTracks(event: TableLazyLoadEvent): void {
+    if (this._getTracks$) {
+      this._getTracks$.unsubscribe();
+    }
+    console.log('loadTracks event : ', event);
+    const first: number = event.first ?? 0;
+    const rows: number = event.rows ?? 25;
+    this._getTracks$ = this.deezerService.getPlaylistTracks(this.playlistId, first, rows)
     .subscribe({
       next: (response) => {
-        this.tracks = response.data;
+        this.tracks.splice(first, response.data.length, ...response.data);
         this.nextTracksUrl = response.next;
-        this.isLoadingTracks = false;
       },
       error: (err) => {
         console.error('Error fetching tracks', err);
-        this.isLoadingTracks = false;
       },
     });
-  }
-
-  /**
-   * Loads more tracks when the user scrolls near the bottom of the page.
-   */
-  @HostListener('window:scroll', [])
-  onScroll(): void {
-    if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
-      this.nextTracksUrl &&
-      !this.isLoadingTracks
-    ) {
-      this.loadMoreTracks();
-    }
-  }
-
-  /**
-   * Fetches the next set of tracks using the DeezerService.
-   */
-  loadMoreTracks(): void {
-    if (this.nextTracksUrl) {
-      this.isLoadingTracks = true;
-      this.deezerService.getNextPlaylistTracks(this.nextTracksUrl)
-      .subscribe({
-        next: (response) => {
-          this.tracks = [...this.tracks, ...response.data];
-          this.nextTracksUrl = response.next;
-          this.isLoadingTracks = false;
-        },
-        error: (err) => {
-          console.error('Error loading more tracks', err);
-          this.isLoadingTracks = false;
-        },
-      });
-    }
   }
 
   /**
@@ -119,19 +99,5 @@ export class PlaylistDetailsComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/']);
   }
-  /**
-   * Formats the total duration of the playlist.
-   */
-  get formattedTotalDuration(): string {
-    return this.playlist ? formatDuration(this.playlist.duration) : '00:00:00';
-  }
 
-  /**
-   * Formats the duration of a single track.
-   * @param seconds Duration in seconds.
-   * @returns Formatted duration string.
-   */
-  formatTrackDuration(seconds: number): string {
-    return formatDuration(seconds);
-  }
 }
