@@ -57,19 +57,11 @@ export class DeezerService {
   /**
    * Fetches the tracks for a playlist.
    * @param playlistId The ID of the playlist to fetch tracks for.
+   * @param index The index to start fetching tracks from.
+   * @param rows The number of tracks to fetch.
    */
   getPlaylistTracks(playlistId: number, index: number, rows: number): Observable<DeezerTracksResponse> {
     const url = `${this.API_URL}/playlist/${playlistId}/tracks?index=${index}&limit=${rows}`;
     return this.http.get<DeezerTracksResponse>(url);
-  }
-
-  /**
-   * Fetches the next set of tracks for a playlist.
-   * @param nextUrl The URL to fetch the next set of tracks from, which is provided in the first response.
-   */
-  getNextPlaylistTracks(nextUrl: string): Observable<DeezerTracksResponse> {
-    // Remove the base URL to use the proxy path
-    const relativeUrl = this.transformNextUrl(nextUrl);
-    return this.http.get<DeezerTracksResponse>(relativeUrl);
   }
 }
